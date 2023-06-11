@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ProductManager from '../controllers/productManager.js'
+import ProductManager from '../services/productManager.js'
 
 let productManager = new ProductManager();
 
@@ -14,7 +14,6 @@ productRouter.get("/", async (req, res) => {
             res.send(await products.slice(0, limit));
             return;
         }
-        /* if(!type || (type !== "pc" && type !== "phone" && type !== "celular" && type !== "computadora")) */
         if(!type || (type !== "pc" && type !== "phone" && type !== "celular" && type !== "computadora" /*ver esto que solo toma los tipos codeados y no los que se pasan por el req.body*/)) { 
             res.send(products)
         } else {
@@ -41,8 +40,8 @@ productRouter.get("/:pid" , async (req, res)=> {
 productRouter.post("/", async (req, res) => {
     try {
         let addedProduct = req.body;
-        await productManager.addProduct(addedProduct)
-		res.status(201).send(await productManager.getProducts());
+        let products = await productManager.addProduct(addedProduct)
+		res.status(201).send(products);
     } catch (e) {
 		res.status(400).send({e});
     }
@@ -51,15 +50,14 @@ productRouter.post("/", async (req, res) => {
 productRouter.put('/:pid', async (req, res) => {
     try {
         let id = parseInt(req.params.pid);
-        let addedProduct = req.body;
-        res.status(200).send(await productManager.updateProduct(id, addedProduct))
+        res.status(200).send(await productManager.updateProduct(id))
     } catch (e) {
 		res.status(400).send({e});
     }
 })
 
 productRouter.delete('/:pid' , async (req, res) => {
-    try { 
+    try {
         let id = (req.params.pid);
         res.status(200).send(await productManager.deleteProduct(id))
     } catch (e) {
