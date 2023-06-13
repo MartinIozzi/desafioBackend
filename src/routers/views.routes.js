@@ -20,4 +20,12 @@ viewsRoutes.get ('/realtimeproducts', async (req, res) => {
     }
 })
 
+viewsRoutes.get ('/products', async (req, res) => {
+    try {
+        res.render('products');
+    } catch (err) {
+        res.status(500).send({err})
+    }
+})
+
 export default viewsRoutes;
