@@ -7,11 +7,13 @@ class CartService {
     }
 
     async getCart(){
-        return await this.model.find()
+      const carts = await this.model.find();
+      return carts;
     };
 
-    async addCart(cart){
-        await this.model.create(cart);
+    async addCart(){
+      const createdCart = await this.model.create({});
+      return createdCart;
     };
 
     async getCartById (cid) {

@@ -22,12 +22,11 @@ cartRoutes.get('/:cid', async (req, res) => {
 
 cartRoutes.post('/',async (req, res) => {
     try {
-        const cart = req.body;
-        res.status(201).send(await cartService.addCart(cart));
+        res.status(201).send(await cartService.addCart());
     } catch (e) {
-        res.status(400).send({e});
+        res.status(400).send({e: e.message });
     }
-})
+});
 
 cartRoutes.post('/:cid/products/:pid' , async (req, res) => {
     const productId = req.params.pid;
