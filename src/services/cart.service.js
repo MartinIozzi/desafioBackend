@@ -83,6 +83,7 @@ class CartService {
     async updateCart(cartId, products) {
         try {
           const cart = await this.model.findById(cartId);
+          console.log(cart);
           if (!cart) {
             throw new Error('Carrito no encontrado');
           }
@@ -92,13 +93,13 @@ class CartService {
       
           // Agregar los nuevos productos al carrito
           for (const product of products) {
-            const { productId, quantity } = product;
+            const { id: productId, quantity: quantity } = product;
             cart.products.push({ product: productId, quantity });
           }
       
           await cart.save();
-        } catch (error) {
-          console.log(error);
+        } catch (err) {
+          throw err;
         }
     }
 

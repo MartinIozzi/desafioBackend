@@ -85,9 +85,9 @@ cartRoutes.put('/:cid/products/:pid', async (req, res) => {
       res.status(400).send({ error: error.message });
     }
   });
-
+/*
 cartRoutes.delete('api/carts/:cid', async (req, res) => {
 
 });
-
+*/
 export {cartRoutes};
