@@ -59,7 +59,7 @@ cartRoutes.delete('/:cid', async (req, res) => {
         res.status(400).send({err});
     }
 })
-/*
+
 cartRoutes.put('/:cid', async (req, res) => {
     try {
         const cartId = req.params.cid;
@@ -72,7 +72,7 @@ cartRoutes.put('/:cid', async (req, res) => {
     }
   }
 );
-/*
+
 cartRoutes.put('/:cid/products/:pid', async (req, res) => {
     try {
       const cartId = req.params.cid;
@@ -80,12 +80,12 @@ cartRoutes.put('/:cid/products/:pid', async (req, res) => {
       const quantity = req.body.quantity;
   
       await cartService.updateProductQuantity(cartId, productId, quantity);
-      res.status(200).send('Cantidad de ejemplares actualizada exitosamente');
+      res.status(200).send("Se ejecutó exitosamente");
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
   });
-*/
+
 cartRoutes.delete('api/carts/:cid', async (req, res) => {
 
 });

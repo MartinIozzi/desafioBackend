@@ -34,7 +34,15 @@ class CartService {
             if(!product) {
                 throw new Error('Producto no encontrado');
             }
-            cart.products.push({product: product._id});
+            const existingProduct = cart.products.find(
+              (p) => p.product.toString() === productId
+            );
+            if (existingProduct) {
+              existingProduct.quantity += 1; // Incrementar la cantidad si el producto ya existe
+            } else {
+              cart.products.push({ product: product._id, quantity: 1 }); // Agregar un nuevo producto con cantidad 1
+            }
+        
             return await cart.save();
         } catch (err) {
             console.log(err);
@@ -71,7 +79,7 @@ class CartService {
         console.log(err);
       }
     }
-/*
+
     async updateCart(cartId, products) {
         try {
           const cart = await this.model.findById(cartId);
@@ -93,32 +101,36 @@ class CartService {
           console.log(error);
         }
     }
-    */
-/*
+
     async updateProductQuantity(cartId, productId, quantity) {
         try {
-          const cart = await this.model.findById(cartId);
+          const cart = await this.model.findOneAndUpdate(
+            { _id: cartId, 'products.product': productId },
+            { $set: { 'products.$.quantity': quantity } },
+            { new: true }
+          );
+      
           if (!cart) {
             throw new Error('Carrito no encontrado');
           }
       
-          const productIndex = cart.products.findIndex(
+          // Verificar si el producto se encontró y se actualizó correctamente
+      
+          const updatedProduct = cart.products.find(
             (product) => product.product.toString() === productId
           );
       
-          if (productIndex !== -1) {
-            cart.products[productIndex].quantity = quantity;
-            await cart.save();
+          if (!updatedProduct) {
+            throw new Error('El producto no se encuentra en el carrito');
           }
       
-          // Si no se encuentra el producto en el carrito, se podría lanzar un error o simplemente no hacer nada
-      
+          // Enviar una respuesta de éxito o realizar cualquier otra acción necesaria
+          console.log('Carrito actualizado exitosamente');
         } catch (error) {
           console.log(error);
           throw error;
         }
       }
-*/
-}
+    }
 
 export const cartService = new CartService();
