@@ -63,10 +63,9 @@ cartRoutes.delete('/:cid', async (req, res) => {
 cartRoutes.put('/:cid', async (req, res) => {
     try {
         const cartId = req.params.cid;
-        const products = req.body.products;
+        const products = req.body;
 
-        await cartService.updateCart(cartId, products);
-        res.status(200).send('Carrito actualizado exitosamente');
+        res.status(200).send(await cartService.updateCart(cartId, products));
     } catch (err) {
         res.status(400).send({ err });
     }
@@ -74,11 +73,12 @@ cartRoutes.put('/:cid', async (req, res) => {
 );
 
 cartRoutes.put('/:cid/products/:pid', async (req, res) => {
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
+    const quantity = req.body.quantity;
+    console.log(quantity);
     try {
-      const cartId = req.params.cid;
-      const productId = req.params.pid;
-      const quantity = req.body.quantity;
-  
+
       await cartService.updateProductQuantity(cartId, productId, quantity);
       res.status(200).send("Se ejecutó exitosamente");
     } catch (error) {

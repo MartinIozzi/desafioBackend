@@ -81,57 +81,31 @@ class CartService {
     }
 
     async updateCart(cartId, products) {
-        try {
-          const cart = await this.model.findById(cartId);
-          console.log(cart);
-          if (!cart) {
-            throw new Error('Carrito no encontrado');
-          }
-      
-          // Limpiar el carrito actual
-          cart.products = [];
-      
-          // Agregar los nuevos productos al carrito
-          for (const product of products) {
-            const { id: productId, quantity: quantity } = product;
-            cart.products.push({ product: productId, quantity });
-          }
-      
-          await cart.save();
-        } catch (err) {
-          throw err;
-        }
+      try {
+        const updatedCart = await this.model.findByIdAndUpdate(
+          cartId,
+          { products },
+          { new: true }
+        );
+        return updatedCart;
+      } catch (error) {
+        console.log('Error: no se pudo actualizar los productos del carrito.');
+      }
     }
 
     async updateProductQuantity(cartId, productId, quantity) {
-        try {
-          const cart = await this.model.findOneAndUpdate(
-            { _id: cartId, 'products.product': productId },
-            { $set: { 'products.$.quantity': quantity } },
-            { new: true }
-          );
-      
-          if (!cart) {
-            throw new Error('Carrito no encontrado');
-          }
-      
-          // Verificar si el producto se encontró y se actualizó correctamente
-      
-          const updatedProduct = cart.products.find(
-            (product) => product.product.toString() === productId
-          );
-      
-          if (!updatedProduct) {
-            throw new Error('El producto no se encuentra en el carrito');
-          }
-      
-          // Enviar una respuesta de éxito o realizar cualquier otra acción necesaria
-          console.log('Carrito actualizado exitosamente');
-        } catch (error) {
-          console.log(error);
-          throw error;
-        }
+      const cart = await this.model.findOne({ _id: cartId });
+      const productIndex = cart.products.findIndex(
+        (product) => product._id.toString() === productId
+      );
+  
+      if (productIndex !== -1) {
+        cart.products[productIndex].quantity = quantity;
+        return await cart.save();
+      } else {
+        console.log('Error: el producto no fue encontrado dentro del carrito.');
       }
     }
+}
 
 export const cartService = new CartService();
