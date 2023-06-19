@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { productService } from "../services/product.service.js";
+import { cartService } from "../services/cart.service.js";
 
 const viewsRoutes = Router();
 
@@ -25,6 +26,15 @@ viewsRoutes.get ('/products', async (req, res) => {
         res.render('products');
     } catch (err) {
         res.status(500).send({err})
+    }
+})
+
+viewsRoutes.get('/carts', async (req, res) => {
+    try{
+        const productsList = await productService.getProducts()
+        res.render('carts', {products: productsList});
+    } catch(err){
+        res.status(500).send({err});
     }
 })
 

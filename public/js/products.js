@@ -1,18 +1,17 @@
 const socket = io();
 
 function render (products) {
-    let html = products.map((elem, index) => {
-        return `<div class="card display" style="width: 18rem;">
-        <img src="${elem.img}" class="card-img-top" alt="...">
-        <div class="card-body">
+    let html = products.map((elem) => {
+        return `<div class="card display bg-dark-subtle" style="width: 22rem;">
+        <div class="card-body col">
+        <img src="${elem.img}" class="card-img-top" style="width: 12rem;" alt="...">
           <h4 class="card-title">${elem.name}</h4>
           <p class="card-text">${elem.description}</p>
           <p class="card-text">${elem.price}</p>
           <p class="card-text">${elem.code}</p>
           <p class="card-text">${elem.stock}</p>
           <p class="card-text">${elem.type}</p>
-          <button class="btn-eliminar btn btn-danger" id="${elem.id}">Eliminar producto</button>
-          <button class="btn btn-primary" onclick="addToCart()">Agregar al carrito</button>
+          <button class="btn-eliminar btn btn-danger" id="${elem._id}">Eliminar producto</button>
         </div>
       </div>`
     }).join(' ');
@@ -20,16 +19,24 @@ function render (products) {
 }
 
 socket.on ('send', (products) => {
+  try {
     render(products)
     let botonesEliminar = document.getElementsByClassName("btn-eliminar");
     botonesEliminar = Array.from(botonesEliminar)
     botonesEliminar.forEach(botonEliminar => {
     botonEliminar.addEventListener('click', () => {
-        socket.emit ('delete', botonEliminar.id)
+      const productId = botonEliminar.id;
+        socket.emit ('delete', productId);
     });
+  });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-socket.on('send', () => {
+async function showCart() {
   
-})
-});
+}
+
+let btnShowCart = document.getElementById("showCart")
+btnShowCart.addEventListener('click', (showCart))

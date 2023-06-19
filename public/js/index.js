@@ -11,7 +11,7 @@ function render (products) {
                 <p>Stock restante: ${elem.stock} productos</p>
                 <p>Tipo de producto: ${elem.type}</p>
                 <div>Archivo: ${elem.img}</div><br>
-                <button class="btn-eliminar" id="${elem.id}">Eliminar producto</button>
+                <button class="btn-eliminar" id="${elem._id}">Eliminar producto</button>
             </hr>`;
     }).join(' ');
     
@@ -42,5 +42,5 @@ function enviarProducto () {
     socket.emit('add', products);
 }
 
-let boton = document.getElementById("boton")
-boton.addEventListener('click', (enviarProducto))//si pongo parentesis se ejecuta solo
+let botonEnviar = document.getElementById("boton")
+botonEnviar.addEventListener('click', (enviarProducto)) //si pongo parentesis se ejecuta solo

@@ -16,7 +16,7 @@ cartRoutes.get('/:cid', async (req, res) => {
     try {
         res.status(200).send(await cartService.getCartById(cartId));
     } catch (e) {
-        res.status(400).send({e});
+        res.status(400).send('Error al obtener el carrito', {e});
     }
 })
 
@@ -76,7 +76,6 @@ cartRoutes.put('/:cid/products/:pid', async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
     const quantity = req.body.quantity;
-    console.log(quantity);
     try {
 
       await cartService.updateProductQuantity(cartId, productId, quantity);
@@ -85,9 +84,5 @@ cartRoutes.put('/:cid/products/:pid', async (req, res) => {
       res.status(400).send({ error: error.message });
     }
   });
-/*
-cartRoutes.delete('api/carts/:cid', async (req, res) => {
 
-});
-*/
 export {cartRoutes};
