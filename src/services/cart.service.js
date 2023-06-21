@@ -11,6 +11,10 @@ class CartService {
       return carts;
     };
 
+    async getCartId(cid){
+      return cid;
+    }
+
     async addCart(){
       const createdCart = await this.model.create({});
       return createdCart;
